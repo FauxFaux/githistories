@@ -36,6 +36,11 @@ master() {
 	git checkout $master
 }
 
+merge() {
+	g merge "$@"
+	git branch -d $1
+}
+
 naturist() {
 	master="naturist"
 	initial
@@ -52,13 +57,11 @@ naturist() {
 	master
 	commits "eighth on master"
 
-	g merge dev
-	git branch -d dev
+	merge dev
 
 	commits "ninth on master"
 
-	g merge patch
-	git branch -d patch
+	merge patch
 }
 
 flat() {
@@ -76,23 +79,45 @@ flat() {
 	commits "seventh on patch"
 	master
 	commits "eighth on master"
-	git checkout dev
-	g rebase $master
+	g rebase $master dev
 	master
-	g merge dev
-	git branch -d dev
+	merge dev
 
 	commits "ninth on master"
 
-	git checkout patch
-	g rebase $master
+	g rebase $master patch
 	master
-	g merge patch
-	git branch -d patch
+	merge patch
 }
 
 onlymerges() {
-	echo
+	master="onlymerges"
+	initial
+	git checkout -b firstandsecond
+	commits "first" "second"
+	master
+	merge firstandsecond --no-ff
+	git checkout -b dev
+	commits "third" "fourth"
+	git branch patch
+	git checkout -b fifth
+	commits "fifth on master"
+	master
+	merge fifth --no-ff
+	git checkout dev
+	commits "sixth on dev"
+	git checkout patch
+	commits "seventh on patch"
+	git checkout -b eigth
+	commits "eighth on master"
+	master
+	merge eigth --no-ff
+	merge dev
+	git checkout -b ninth
+	commits "ninth on master"
+	master
+	merge ninth
+	merge patch
 }
 
 supercommits() {
@@ -101,4 +126,5 @@ supercommits() {
 
 naturist
 flat
+onlymerges
 
