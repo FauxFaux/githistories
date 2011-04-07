@@ -108,6 +108,7 @@ onlymerges() {
 	commits "sixth on dev"
 	git checkout patch
 	commits "seventh on patch"
+	master
 	git checkout -b eigth
 	commits "eighth on master"
 	master
@@ -116,8 +117,8 @@ onlymerges() {
 	git checkout -b ninth
 	commits "ninth on master"
 	master
-	merge ninth
-	merge patch
+	merge ninth --no-ff
+	merge patch --no-ff
 }
 
 supercommits() {
@@ -146,8 +147,16 @@ supercommits() {
 	merge patch --no-ff
 }
 
-naturist
-flat
-onlymerges
-supercommits
+lg() {
+	git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset' "$@" | cat
+}
+CMDS='naturist flat onlymerges supercommits'
+for cmd in naturist flat onlymerges supercommits; do
+	$cmd
+done
+
+lg $CMDS
+echo
+echo but..
+lg --first-parent $CMDS
 
