@@ -121,10 +121,33 @@ onlymerges() {
 }
 
 supercommits() {
-	echo
+	master="supercommits"
+	initial
+	commits "first" "second"
+	git checkout -b dev
+	commits "third" "fourth"
+	git branch patch
+	master
+	commits "fifth on master"
+	git checkout dev
+	commits "sixth on dev"
+	git checkout patch
+	commits "seventh on patch"
+	master
+	commits "eighth on master"
+	g rebase $master dev
+	master
+	merge dev --no-ff
+
+	commits "ninth on master"
+
+	g rebase $master patch
+	master
+	merge patch --no-ff
 }
 
 naturist
 flat
 onlymerges
+supercommits
 
