@@ -148,15 +148,15 @@ supercommits() {
 }
 
 lg() {
-	git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset' "$@" | cat
+	git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset' --date-order "$@" | cat
+	echo
+	echo
 }
 CMDS='naturist flat onlymerges supercommits'
 for cmd in naturist flat onlymerges supercommits; do
 	$cmd
 done
-
+git checkout master
 lg $CMDS
-echo
-echo but..
 lg --first-parent $CMDS
 
